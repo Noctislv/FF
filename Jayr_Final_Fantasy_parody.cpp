@@ -12,7 +12,7 @@ const int SCREEN_H = 480;
 const int BOUNCER_SIZE = 32;
 enum MYKEYS { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_ENTER };
 enum STATES { INTRO, PLAYING, FIGHTING, MENU, END, RUN };
-enum ENEMIES { GOOMBA, KNUCKLES, GARFIELD, PNEUMONIA };
+enum ENEMIES { TRAPS, KNUCKLES, JESUS, BRO };
 
 int main() {
 	int enemygen = 0;
@@ -67,14 +67,15 @@ int main() {
 
 
 	bouncer = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
-	goomba = al_load_bitmap("goomba.png");
-	jayr = al_load_bitmap("jayr.png");
-	ALLEGRO_BITMAP *garfield = al_load_bitmap("garfield.png");
-	ALLEGRO_BITMAP *pneumonia = al_load_bitmap("pneumonia.jpg");
-	ALLEGRO_BITMAP *knuckles = al_load_bitmap("knuckles.png");
+	traps = al_load_bitmap("traps.jfif");
+	jayr = al_load_bitmap("Jayr.jpg");
+	ALLEGRO_BITMAP *jesus = al_load_bitmap("Jesus.png");
+	ALLEGRO_BITMAP *bro = al_load_bitmap("bro.jfif");
+	ALLEGRO_BITMAP *knuckles = al_load_bitmap("knuckles.jpg");
+	background = al_load_bitmap("background.jpg");
 	al_convert_mask_to_alpha(jayr, al_map_rgb(255, 0, 255));
-	al_convert_mask_to_alpha(goomba, al_map_rgb(255, 0, 255));
-	al_convert_mask_to_alpha(garfield, al_map_rgb(255, 0, 255));
+	al_convert_mask_to_alpha(traps, al_map_rgb(255, 0, 255));
+	al_convert_mask_to_alpha(jesus, al_map_rgb(255, 0, 255));
 
 	al_convert_mask_to_alpha(knuckles, al_map_rgb(255, 0, 255));
 
@@ -310,7 +311,7 @@ int main() {
 
 				}
 				
-				if (key[KEY_ENTER]) {
+				/*if (key[KEY_ENTER]) {
 					if (fight == RUN) {
 
 						al_draw_textf(font, al_map_rgb(150, 150, 150), 50, 450, 0, "Attempting to run...");
@@ -328,7 +329,7 @@ int main() {
 						//if HP bad guy <=0, state = playing
 					}
 
-				}
+				}*/
 
 				redraw = true;
 			}
@@ -403,14 +404,14 @@ int main() {
 				//menu
 				al_draw_rectangle(0, 304, SCREEN_W - 3, SCREEN_H - 3, al_map_rgb(255, 255, 255), 5);
 
-				if (enemygen == GOOMBA)
-					al_draw_bitmap(goomba, 20, 20, NULL);
+				if (enemygen == TRAPS)
+					al_draw_bitmap(traps, 20, 20, NULL);
 				else if (enemygen == KNUCKLES)
 					al_draw_bitmap(knuckles, 20, 20, NULL);
-				else if (enemygen == GARFIELD)
-					al_draw_bitmap(garfield, 20, 20, NULL);
-				else if (enemygen == PNEUMONIA)
-					al_draw_bitmap(pneumonia, 20, 20, NULL);
+				else if (enemygen == JESUS)
+					al_draw_bitmap(jesus, 20, 20, NULL);
+				else if (enemygen == BRO)
+					al_draw_bitmap(bro, 20, 20, NULL);
 
 
 				al_draw_textf(font, al_map_rgb(150, 150, 150), 100, 400, 0, "Run");
