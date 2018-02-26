@@ -15,9 +15,20 @@ enum STATES { INTRO, PLAYING, FIGHTING, MENU, END, RUN };
 enum ENEMIES { TRAPS, KNUCKLES, JESUS, BRO };
 
 int main() {
+	
 	int enemygen = 0;
 	int randnum = 0;
 	int fight = 1;
+	
+	//Sprite
+	const int maxFrame = 10;
+	int curFrame = 0;
+	int frameCount = 0;
+	int frameDelay = 5;
+	int frameWidth = 32;
+	int frameHeight = 50;
+
+
 
 	//overworld map
 	int world[100][100];
@@ -38,9 +49,10 @@ int main() {
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_BITMAP *background = NULL;
-	ALLEGRO_BITMAP *bouncer = NULL;
 	ALLEGRO_BITMAP *goomba = NULL;
 	ALLEGRO_BITMAP *jayr = NULL;
+	ALLEGRO_BITMAP *sprite = NULL;
+
 	float bouncer_x = SCREEN_W / 2.0 - BOUNCER_SIZE / 2.0;
 	float bouncer_y = SCREEN_H / 2.0 - BOUNCER_SIZE / 2.0;
 	bool key[5] = { false, false, false, false, false };
@@ -65,18 +77,21 @@ int main() {
 
 	display = al_create_display(SCREEN_W, SCREEN_H);
 
+	//Load images
+	sprite = al_load_bitmap("Sprites.png");
+	
 
-	bouncer = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
 	traps = al_load_bitmap("traps.jfif");
 	jayr = al_load_bitmap("Jayr.jpg");
 	ALLEGRO_BITMAP *jesus = al_load_bitmap("Jesus.png");
 	ALLEGRO_BITMAP *bro = al_load_bitmap("bro.jfif");
 	ALLEGRO_BITMAP *knuckles = al_load_bitmap("knuckles.jpg");
+
 	background = al_load_bitmap("background.jpg");
 	al_convert_mask_to_alpha(jayr, al_map_rgb(255, 0, 255));
 	al_convert_mask_to_alpha(traps, al_map_rgb(255, 0, 255));
 	al_convert_mask_to_alpha(jesus, al_map_rgb(255, 0, 255));
-
+	al_convert_mask_to_alpha(sprite, al_map_rgb(159, 202, 215));
 	al_convert_mask_to_alpha(knuckles, al_map_rgb(255, 0, 255));
 
 	al_set_target_bitmap(bouncer);
@@ -263,14 +278,27 @@ int main() {
 				}
 			}
 
+			if (++frameCount >= frameDelay)
+			{
+				if (++curFrame >= maxFrame)
+					curFrame = 0;
+
+
+				frameCount = 0;
+			}
+
+			x -= 5;
+
+			if (x <= 0 - frameWidth)
+				x = width;
+		}
+
+		al_draw_bitmap_region(sprite, curFrame*frameWidth, 0, frameWidth, frameHeight, x, y, 0);
+
 			if (redraw && al_is_event_queue_empty(event_queue)) {
 				redraw = false;
 
-				al_clear_to_color(al_map_rgb(50, 150, 50));
-
-				// translating from world coordinates to screen coordinates
-				//int x = object.x - cameraX;
-				//int y = object.y - cameraY;
+				al_clear_to_color(al_map_rgb(50, 150, 50));Y;
 
 				for (int i = 0; i < 100; i++)
 					for (int j = 0; j < 100; j++)
