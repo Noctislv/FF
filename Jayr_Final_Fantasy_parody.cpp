@@ -15,12 +15,19 @@ enum STATES { INTRO, PLAYING, FIGHTING, MENU, END, RUN };
 enum ENEMIES { TRAPS, KNUCKLES, JESUS, BRO };
 
 int main() {
-	
+
 	int enemygen = 0;
 	int randnum = 0;
 	int fight = 1;
-	
+
 	//Sprite
+	int width = 640;
+	int height = 480;
+	bool done = false;
+
+	int x = width / 2;
+	int y = height / 2;
+
 	const int maxFrame = 10;
 	int curFrame = 0;
 	int frameCount = 0;
@@ -51,6 +58,7 @@ int main() {
 	ALLEGRO_BITMAP *background = NULL;
 	ALLEGRO_BITMAP *goomba = NULL;
 	ALLEGRO_BITMAP *jayr = NULL;
+	ALLEGRO_BITMAP *traps = NULL;
 	ALLEGRO_BITMAP *sprite = NULL;
 
 	float bouncer_x = SCREEN_W / 2.0 - BOUNCER_SIZE / 2.0;
@@ -79,7 +87,7 @@ int main() {
 
 	//Load images
 	sprite = al_load_bitmap("Sprites.png");
-	
+
 
 	traps = al_load_bitmap("traps.jfif");
 	jayr = al_load_bitmap("Jayr.jpg");
@@ -94,7 +102,7 @@ int main() {
 	al_convert_mask_to_alpha(sprite, al_map_rgb(159, 202, 215));
 	al_convert_mask_to_alpha(knuckles, al_map_rgb(255, 0, 255));
 
-	al_set_target_bitmap(bouncer);
+	al_set_target_bitmap(jayr);
 
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 
@@ -295,24 +303,24 @@ int main() {
 
 		al_draw_bitmap_region(sprite, curFrame*frameWidth, 0, frameWidth, frameHeight, x, y, 0);
 
-			if (redraw && al_is_event_queue_empty(event_queue)) {
-				redraw = false;
+		if (redraw && al_is_event_queue_empty(event_queue)) {
+			redraw = false;
 
-				al_clear_to_color(al_map_rgb(50, 150, 50));Y;
+			al_clear_to_color(al_map_rgb(50, 150, 50)); Y;
 
-				for (int i = 0; i < 100; i++)
-					for (int j = 0; j < 100; j++)
-						al_draw_rectangle((i) * 10 - cameraX, (j) * 10 - cameraY, (i) * 10 + 10 - cameraX, (j) * 10 + 10 - cameraY, al_map_rgb(0, 0, 0), 1);
+			for (int i = 0; i < 100; i++)
+				for (int j = 0; j < 100; j++)
+					al_draw_rectangle((i) * 10 - cameraX, (j) * 10 - cameraY, (i) * 10 + 10 - cameraX, (j) * 10 + 10 - cameraY, al_map_rgb(0, 0, 0), 1);
 
-				//cout << bouncer_x << " , " << bouncer_y << endl;
+			//cout << bouncer_x << " , " << bouncer_y << endl;
 
-				al_draw_bitmap(bouncer, bouncer_x, bouncer_y, 0);
+			al_draw_bitmap(jayr, bouncer_x, bouncer_y, 0);
 
-				al_flip_display();
-			}
-			break;
+			al_flip_display();
+		}
+		break;
 
-			////////////////////////////////////////////////////////////fighting state//////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////fighting state//////////////////////////////////////////////////////////////////////////////
 
 
 		case FIGHTING:
@@ -338,25 +346,22 @@ int main() {
 						fight = 0;
 
 				}
-				
+
 				/*if (key[KEY_ENTER]) {
-					if (fight == RUN) {
-
-						al_draw_textf(font, al_map_rgb(150, 150, 150), 50, 450, 0, "Attempting to run...");
-						al_flip_display();
-						al_rest(2);
-						state = PLAYING;
-					}
-					if (fight == RUN) {
-
-						//wait one second
-						//draw explosion over bad guy
-						//play sound effect
-						//randomly generate damage and subtract from bad guy HP
-						//(add HPS for bad guys and display them)
-						//if HP bad guy <=0, state = playing
-					}
-
+				if (fight == RUN) {
+				al_draw_textf(font, al_map_rgb(150, 150, 150), 50, 450, 0, "Attempting to run...");
+				al_flip_display();
+				al_rest(2);
+				state = PLAYING;
+				}
+				if (fight == RUN) {
+				//wait one second
+				//draw explosion over bad guy
+				//play sound effect
+				//randomly generate damage and subtract from bad guy HP
+				//(add HPS for bad guys and display them)
+				//if HP bad guy <=0, state = playing
+				}
 				}*/
 
 				redraw = true;
@@ -468,17 +473,17 @@ int main() {
 			break;
 		case END:
 			break;
-		}
-
-
-
-
 	}
 
-	al_destroy_bitmap(bouncer);
-	al_destroy_timer(timer);
-	al_destroy_display(display);
-	al_destroy_event_queue(event_queue);
 
-	return 0;
+
+
+}
+
+al_destroy_bitmap(jayr);
+al_destroy_timer(timer);
+al_destroy_display(display);
+al_destroy_event_queue(event_queue);
+
+return 0;
 }
