@@ -299,14 +299,14 @@ int main() {
 
 			if (x <= 0 - frameWidth)
 				x = width;
-		}
+		
 
 		al_draw_bitmap_region(sprite, curFrame*frameWidth, 0, frameWidth, frameHeight, x, y, 0);
 
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			redraw = false;
 
-			al_clear_to_color(al_map_rgb(50, 150, 50)); Y;
+			al_clear_to_color(al_map_rgb(50, 150, 50)); 
 
 			for (int i = 0; i < 100; i++)
 				for (int j = 0; j < 100; j++)
