@@ -4,17 +4,22 @@
 #include<allegro5/allegro_ttf.h>
 #include<allegro5\allegro_primitives.h>
 #include<allegro5\allegro_image.h>
+#include<ctime>
 using namespace std;
 
+int Attack();
 const float FPS = 60;
-const int SCREEN_W = 640;
-const int SCREEN_H = 480;
+const int SCREEN_W = 680;
+const int SCREEN_H = 500;
 const int BOUNCER_SIZE = 32;
 enum MYKEYS { KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_ENTER };
 enum STATES { INTRO, PLAYING, FIGHTING, MENU, END, RUN };
 enum ENEMIES { TRAPS, KNUCKLES, JESUS, BRO };
+enum FIGHTTYPE { RUNNING, HIT, MAGIC };
 
 int main() {
+	cout << "flag 1" << endl;
+	int SlowTheHeckDown = 0;
 
 	int enemygen = 0;
 	int randnum = 0;
@@ -32,7 +37,7 @@ int main() {
 	int curFrame = 0;
 	int frameCount = 0;
 	int frameDelay = 5;
-	int frameWidth = 32;
+	int frameWidth = 60;
 	int frameHeight = 50;
 
 
@@ -47,7 +52,7 @@ int main() {
 	// the world size
 	int worldWidth = 1000;
 	int worldHeight = 1000;
-
+	cout << "flag2";
 	// the camera's position
 	int cameraX = SCREEN_W / 2.0 - BOUNCER_SIZE / 2.0;
 	int cameraY = SCREEN_H / 2.0 - BOUNCER_SIZE / 2.0;
@@ -81,30 +86,33 @@ int main() {
 	font = al_load_font("first.ttf", 20, NULL);
 	if (font == NULL)
 		cout << "derp" << endl;
-	bigFont = al_load_font("first.ttf", 80, NULL);
+	bigFont = al_load_font("first.ttf", 50, NULL);
 
 	display = al_create_display(SCREEN_W, SCREEN_H);
 
 	//Load images
 	sprite = al_load_bitmap("Sprites.png");
 
+	cout << "flag alpha";
 
-	traps = al_load_bitmap("traps.jfif");
-	jayr = al_load_bitmap("Jayr.jpg");
-	ALLEGRO_BITMAP *jesus = al_load_bitmap("Jesus.png");
-	ALLEGRO_BITMAP *bro = al_load_bitmap("bro.jfif");
-	ALLEGRO_BITMAP *knuckles = al_load_bitmap("knuckles.jpg");
-
+	traps = al_load_bitmap("traps.jpg");
+	if (traps == NULL)cout << "no traps" << endl;
+	jayr = al_load_bitmap("Robin.jpg");
+	ALLEGRO_BITMAP *jesus = al_load_bitmap("Jesus.jpg");
+	ALLEGRO_BITMAP *bro = al_load_bitmap("bro.jpg");
+	ALLEGRO_BITMAP *knuckles = al_load_bitmap("knuckles.png");
+	cout << "flag 2.5" << endl;
 	background = al_load_bitmap("background.jpg");
-	al_convert_mask_to_alpha(jayr, al_map_rgb(255, 0, 255));
-	al_convert_mask_to_alpha(traps, al_map_rgb(255, 0, 255));
+	cout << "flag 2.6" << endl;
+	//al_convert_mask_to_alpha(jayr, al_map_rgb(255, 0, 255));
+	al_convert_mask_to_alpha(traps, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(jesus, al_map_rgb(255, 0, 255));
-	al_convert_mask_to_alpha(sprite, al_map_rgb(159, 202, 215));
+	al_convert_mask_to_alpha(sprite, al_map_rgb(255, 255, 255));
 	al_convert_mask_to_alpha(knuckles, al_map_rgb(255, 0, 255));
+	cout << "flag3" << endl;
+	//al_set_target_bitmap(jayr);
 
-	al_set_target_bitmap(jayr);
-
-	al_clear_to_color(al_map_rgb(255, 0, 255));
+	//al_clear_to_color(al_map_rgb(255, 0, 255));
 
 	al_set_target_bitmap(al_get_backbuffer(display));
 
@@ -123,7 +131,7 @@ int main() {
 	al_start_timer(timer);
 
 	al_flush_event_queue(event_queue);//clear buffer
-									  //game loop
+	cout << "beginning game loop" << endl;				  //game loop
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
@@ -174,7 +182,7 @@ int main() {
 				redraw = false;
 
 				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_draw_textf(bigFont, al_map_rgb(150, 150, 150), 10, 80, 0, "Noctis goes to VRChat");
+				al_draw_textf(bigFont, al_map_rgb(150, 150, 150), 80, 100, 0, "Noctis jumps into VRChat");
 				al_draw_textf(font, al_map_rgb(150, 150, 150), 400, 400, 0, "Press Enter To Begin");
 
 				al_flip_display();
@@ -189,8 +197,8 @@ int main() {
 			if (ev.type == ALLEGRO_EVENT_TIMER) {
 				if (key[KEY_UP] && bouncer_y >= 4.0) {
 					randnum = rand() % 100;
-					if (randnum == 1)
-						state = FIGHTING;
+					//if (randnum == 1)
+						//state = FIGHTING;
 					cout << "rand is " << randnum << endl;
 					bouncer_y -= 4.0;
 				}
@@ -203,7 +211,17 @@ int main() {
 					bouncer_y += 4.0;
 				}
 
-				if (key[KEY_LEFT] && bouncer_x >= 4.0) {
+				if (key[KEY_LEFT] && bouncer_x >= 4.0) {  
+
+					//this code is what cycles the sprite's image. 
+					if (++frameCount >= frameDelay)
+					{
+						if (++curFrame >= maxFrame)
+							curFrame = 0;
+						frameCount = 0;
+					}
+
+
 					randnum = rand() % 100;
 					if (randnum == 1)
 						state = FIGHTING;
@@ -213,8 +231,8 @@ int main() {
 
 				if (key[KEY_RIGHT] && bouncer_x <= SCREEN_W - BOUNCER_SIZE - 4.0) {
 					randnum = rand() % 100;
-					if (randnum == 1)
-						state = FIGHTING;
+					//if (randnum == 1)
+					//	state = FIGHTING;
 					cout << "rand is " << randnum << endl;
 					bouncer_x += 4.0;
 				}
@@ -276,6 +294,7 @@ int main() {
 					key[KEY_LEFT] = false;
 					break;
 
+
 				case ALLEGRO_KEY_RIGHT:
 					key[KEY_RIGHT] = false;
 					break;
@@ -283,89 +302,110 @@ int main() {
 				case ALLEGRO_KEY_ESCAPE:
 					doexit = true;
 					break;
+
+				case ALLEGRO_KEY_ENTER:
+					key[KEY_ENTER] = false;
+					break;
 				}
 			}
 
-			if (++frameCount >= frameDelay)
-			{
-				if (++curFrame >= maxFrame)
-					curFrame = 0;
-
-
-				frameCount = 0;
-			}
-
-			x -= 5;
+			
+			//x -= 5; //this was assuming your character was always moving :(
 
 			if (x <= 0 - frameWidth)
 				x = width;
-		
 
-		al_draw_bitmap_region(sprite, curFrame*frameWidth, 0, frameWidth, frameHeight, x, y, 0);
 
-		if (redraw && al_is_event_queue_empty(event_queue)) {
-			redraw = false;
+			if (redraw && al_is_event_queue_empty(event_queue)) {
+				redraw = false;
 
-			al_clear_to_color(al_map_rgb(50, 150, 50)); 
+				al_clear_to_color(al_map_rgb(50, 150, 50));
 
-			for (int i = 0; i < 100; i++)
-				for (int j = 0; j < 100; j++)
-					al_draw_rectangle((i) * 10 - cameraX, (j) * 10 - cameraY, (i) * 10 + 10 - cameraX, (j) * 10 + 10 - cameraY, al_map_rgb(0, 0, 0), 1);
+				for (int i = 0; i < 100; i++)
+					for (int j = 0; j < 100; j++)
+						al_draw_rectangle((i) * 10 - cameraX, (j) * 10 - cameraY, (i) * 10 + 10 - cameraX, (j) * 10 + 10 - cameraY, al_map_rgb(0, 0, 0), 1);
 
-			//cout << bouncer_x << " , " << bouncer_y << endl;
+				//cout << bouncer_x << " , " << bouncer_y << endl;
 
-			al_draw_bitmap(jayr, bouncer_x, bouncer_y, 0);
 
-			al_flip_display();
-		}
-		break;
+				//use a small walking animation for this!
+				//al_draw_bitmap(sprite, bouncer_x, bouncer_y, 0);
+				al_draw_bitmap_region(sprite, curFrame*frameWidth, 0, frameWidth, frameHeight, x, y, 0);
+				//al_draw_bitmap(background, 0, 0, 0);
 
-		////////////////////////////////////////////////////////////fighting state//////////////////////////////////////////////////////////////////////////////
+				al_flip_display();
+			}
+			break;
+
+			////////////////////////////////////////////////////////////fighting state//////////////////////////////////////////////////////////////////////////////
 
 
 		case FIGHTING:
 
 			cout << "fighting state" << endl;
-
+			//enum FIGHTTYPE {RUNNING,HIT, MAGIC};
 			if (ev.type == ALLEGRO_EVENT_TIMER) {
-				if (key[KEY_RIGHT]) {
-					if (fight == 0)
-						fight = 1;
-					else if (fight == 1)
-						fight = 2;
-					else if (fight == 2)
-						fight = 3;
+				SlowTheHeckDown++;
+				if (SlowTheHeckDown > 1000)
+					SlowTheHeckDown = 0;
 
+				if (key[KEY_RIGHT] && SlowTheHeckDown > 25) {
+					//add sound effect
+					if (fight == RUNNING)
+						fight = HIT;
+					else if (fight == HIT)
+						fight = MAGIC;
+					else if (fight == MAGIC)
+						fight = RUNNING;
+					SlowTheHeckDown = 0;
 				}
-				if (key[KEY_LEFT]) {
-					if (fight == 3)
-						fight = 2;
-					else if (fight == 2)
-						fight = 1;
-					else if (fight == 1)
-						fight = 0;
+				if (key[KEY_LEFT] && SlowTheHeckDown > 25) {
+					//add sound effect
+					if (fight == MAGIC)
+						fight = HIT;
+					else if (fight == HIT)
+						fight = RUNNING;
+					else if (fight == RUNNING)
+						fight = MAGIC;
+					SlowTheHeckDown = 0;
+				}
 
+				if (key[KEY_ENTER]) {
+					if (fight == RUNNING) {
+						al_draw_textf(font, al_map_rgb(150, 150, 150), 50, 450, 0, "Versucht zu laufen...");
+						al_flip_display();
+						al_rest(2);
+						state = PLAYING;
+					}
+					if (fight == HIT) {
+					//call damage generator <-write this function
+					//subtract return value from health
+					//print damage and health to screen (enemy and player health should probably always be displayed)
+					//draw some sort of ouch picture temporarily over enemy
+						//play sound effect
+
+					}
+
+					if (fight == MAGIC) {
+						//call magic generator <write this function
+						//subtract health from enemy
+						//print damage and health to screen
+						//draw magic effect image temporarily over enemy
+						//play sound effect
+
+					}
 				}
 
-				/*if (key[KEY_ENTER]) {
-				if (fight == RUN) {
-				al_draw_textf(font, al_map_rgb(150, 150, 150), 50, 450, 0, "Attempting to run...");
-				al_flip_display();
-				al_rest(2);
-				state = PLAYING;
-				}
-				if (fight == RUN) {
-				//wait one second
-				//draw explosion over bad guy
-				//play sound effect
-				//randomly generate damage and subtract from bad guy HP
-				//(add HPS for bad guys and display them)
-				//if HP bad guy <=0, state = playing
-				}
-				}*/
+				//add enemy attack here!
+				//create and call enemy attack function
+				//draw effect over player
+				//add sound effect
+				//add some allegro pauses before and after
+
+
 
 				redraw = true;
-			}
+			}//end timer
 
 
 
@@ -418,14 +458,16 @@ int main() {
 				case ALLEGRO_KEY_ESCAPE:
 					doexit = true;
 					break;
-
+				case ALLEGRO_KEY_ENTER:
+					key[KEY_ENTER] = false;
+					break;
 
 
 				}
 			}
 			//cout << "flag1" << endl;
 			if (redraw && al_is_event_queue_empty(event_queue)) {
-				//cout << "intro render" << endl;
+				cout << "fight render" << endl;
 				redraw = false;
 
 				al_clear_to_color(al_map_rgb(0, 0, 200));
@@ -447,18 +489,25 @@ int main() {
 					al_draw_bitmap(bro, 20, 20, NULL);
 
 
-				al_draw_textf(font, al_map_rgb(150, 150, 150), 100, 400, 0, "Run");
-				al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
-				al_draw_textf(font, al_map_rgb(150, 150, 150), 500, 400, 0, "Magic");
-				al_draw_bitmap(jayr, 400, 0, NULL);
+
+				al_draw_bitmap(jayr, 400, 50, NULL);
 
 				//select commands
-				if (fight == 0)
+				if (fight == 0) {
 					al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 100, 400, 0, "Run");
-				else if (fight == 1)
+					al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
+					al_draw_textf(font, al_map_rgb(150, 150, 150), 500, 400, 0, "Magic");
+				}
+				else if (fight == 1) {
 					al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 300, 400, 0, "Fight");
-				else if (fight == 2)
+					al_draw_textf(font, al_map_rgb(150, 150, 150), 100, 400, 0, "Run");
+					al_draw_textf(font, al_map_rgb(150, 150, 150), 500, 400, 0, "Magic");
+				}
+				else if (fight == 2) {
 					al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 500, 400, 0, "Magic");
+					al_draw_textf(font, al_map_rgb(150, 150, 150), 100, 400, 0, "Run");
+					al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
+				}
 
 				//al_draw_textf(font, al_map_rgb(150, 150, 150), 400, 400, 0, "stats window");
 
@@ -473,17 +522,29 @@ int main() {
 			break;
 		case END:
 			break;
+		} //end switch
+
+
+
+
+	} //end while
+
+	al_destroy_bitmap(jayr);
+	al_destroy_timer(timer);
+	al_destroy_display(display);
+	al_destroy_event_queue(event_queue);
+
+	return 0;
+} //end main
+int Attack() {
+	int num;
+	srand(time(NULL));
+	num = rand() % 100 + 1;
+	if (num >= 1 && num <= 90) {
+		cout << "You did a normal attack" << endl;
+		return 10;
 	}
-
-
-
-
-}
-
-al_destroy_bitmap(jayr);
-al_destroy_timer(timer);
-al_destroy_display(display);
-al_destroy_event_queue(event_queue);
-
-return 0;
+	else
+		cout << "you did a critical attack" << endl;
+	return 20;
 }
