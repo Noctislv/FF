@@ -53,6 +53,12 @@ int main() {
 	int worldWidth = 1000;
 	int worldHeight = 1000;
 	cout << "flag2";
+
+	//Monsters Health
+	int knucklesHealth = 20;
+	int trapsHealth = 40;
+	int broHealth = 60;
+
 	// the camera's position
 	int cameraX = SCREEN_W / 2.0 - BOUNCER_SIZE / 2.0;
 	int cameraY = SCREEN_H / 2.0 - BOUNCER_SIZE / 2.0;
@@ -378,8 +384,10 @@ int main() {
 						state = PLAYING;
 					}
 					if (fight == HIT) {
-					//call damage generator <-write this function
-					//subtract return value from health
+					int damage = Attack();
+					knucklesHealth = knucklesHealth - damage;
+					trapsHealth = trapsHealth - damage;
+					broHealth = broHealth - damage;
 					//print damage and health to screen (enemy and player health should probably always be displayed)
 					//draw some sort of ouch picture temporarily over enemy
 						//play sound effect
@@ -496,6 +504,8 @@ int main() {
 				if (fight == 0) {
 					al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 100, 400, 0, "Run");
 					al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
+				}
+	al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
 					al_draw_textf(font, al_map_rgb(150, 150, 150), 500, 400, 0, "Magic");
 				}
 				else if (fight == 1) {
@@ -505,13 +515,10 @@ int main() {
 				}
 				else if (fight == 2) {
 					al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 500, 400, 0, "Magic");
-					al_draw_textf(font, al_map_rgb(150, 150, 150), 100, 400, 0, "Run");
-					al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
-				}
+					
+						//al_draw_textf(font, al_map_rgb(150, 150, 150), 400, 400, 0, "stats window");
 
-				//al_draw_textf(font, al_map_rgb(150, 150, 150), 400, 400, 0, "stats window");
-
-				al_flip_display();
+						al_flip_display();
 				/*al_rest(2);
 				if (fight == 0)
 				state = PLAYING;*/
