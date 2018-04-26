@@ -8,6 +8,7 @@
 using namespace std;
 
 int Attack();
+int Magic();
 const float FPS = 60;
 const int SCREEN_W = 680;
 const int SCREEN_H = 500;
@@ -204,7 +205,7 @@ int main() {
 				if (key[KEY_UP] && bouncer_y >= 4.0) {
 					randnum = rand() % 100;
 					//if (randnum == 1)
-						//state = FIGHTING;
+					//state = FIGHTING;
 					cout << "rand is " << randnum << endl;
 					bouncer_y -= 4.0;
 				}
@@ -217,7 +218,7 @@ int main() {
 					bouncer_y += 4.0;
 				}
 
-				if (key[KEY_LEFT] && bouncer_x >= 4.0) {  
+				if (key[KEY_LEFT] && bouncer_x >= 4.0) {
 
 					//this code is what cycles the sprite's image. 
 					if (++frameCount >= frameDelay)
@@ -315,7 +316,7 @@ int main() {
 				}
 			}
 
-			
+
 			//x -= 5; //this was assuming your character was always moving :(
 
 			if (x <= 0 - frameWidth)
@@ -384,19 +385,21 @@ int main() {
 						state = PLAYING;
 					}
 					if (fight == HIT) {
-					int damage = Attack();
-					knucklesHealth = knucklesHealth - damage;
-					trapsHealth = trapsHealth - damage;
-					broHealth = broHealth - damage;
-					//print damage and health to screen (enemy and player health should probably always be displayed)
-					//draw some sort of ouch picture temporarily over enemy
+						int damage = Attack();
+						knucklesHealth = knucklesHealth - damage;
+						trapsHealth = trapsHealth - damage;
+						broHealth = broHealth - damage;
+						//al_draw_textf(font, al_map_rgb(150, 150, 150), 50, 450, 0, knucklesHealth);
+						//draw some sort of ouch picture temporarily over enemy
 						//play sound effect
 
 					}
 
 					if (fight == MAGIC) {
-						//call magic generator <write this function
-						//subtract health from enemy
+						int magicdamage = Magic();
+						knucklesHealth = knucklesHealth - magicdamage;
+						trapsHealth = trapsHealth - magicdamage;
+						broHealth = broHealth - magicdamage;
 						//print damage and health to screen
 						//draw magic effect image temporarily over enemy
 						//play sound effect
@@ -505,20 +508,20 @@ int main() {
 					al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 100, 400, 0, "Run");
 					al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
 				}
-	al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
-					al_draw_textf(font, al_map_rgb(150, 150, 150), 500, 400, 0, "Magic");
-				}
-				else if (fight == 1) {
-					al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 300, 400, 0, "Fight");
-					al_draw_textf(font, al_map_rgb(150, 150, 150), 100, 400, 0, "Run");
-					al_draw_textf(font, al_map_rgb(150, 150, 150), 500, 400, 0, "Magic");
-				}
-				else if (fight == 2) {
-					al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 500, 400, 0, "Magic");
-					
-						//al_draw_textf(font, al_map_rgb(150, 150, 150), 400, 400, 0, "stats window");
+				al_draw_textf(font, al_map_rgb(150, 150, 150), 300, 400, 0, "Fight");
+				al_draw_textf(font, al_map_rgb(150, 150, 150), 500, 400, 0, "Magic");
+			}
+			else if (fight == 1) {
+				al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 300, 400, 0, "Fight");
+				al_draw_textf(font, al_map_rgb(150, 150, 150), 100, 400, 0, "Run");
+				al_draw_textf(font, al_map_rgb(150, 150, 150), 500, 400, 0, "Magic");
+			}
+			else if (fight == 2) {
+				al_draw_textf(bigFont, al_map_rgb(255, 0, 255), 500, 400, 0, "Magic");
 
-						al_flip_display();
+				//al_draw_textf(font, al_map_rgb(150, 150, 150), 400, 400, 0, "stats window");
+
+				al_flip_display();
 				/*al_rest(2);
 				if (fight == 0)
 				state = PLAYING;*/
@@ -554,4 +557,16 @@ int Attack() {
 	else
 		cout << "you did a critical attack" << endl;
 	return 20;
+}
+int Magic() {
+	int num2;
+	srand(time(NULL));
+	num2 = rand() % 100 + 1;
+	if (num2 >= 1 && num2 <= 70) {
+		cout << "You did a normal attack" << endl;
+		return 5;
+	}
+	else
+		cout << "you did a critical attack" << endl;
+	return 15;
 }
